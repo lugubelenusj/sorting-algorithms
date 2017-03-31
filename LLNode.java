@@ -1,35 +1,28 @@
-class LLNode<T extends Comparable<T>>
-{
+class LLNode<T extends Comparable<T>> {
 
-    public LLNode(T  elem, LLNode<T> next)
-    {
+    public LLNode(T  elem, LLNode<T> next) {
         _elem = elem;
         _next = next;
     }
 
-    public LLNode(T elem)
-    {
+    public LLNode(T elem) {
         _elem = elem;
         _next = null;
     }
 
-    public T elem()
-    {
+    public T elem() {
         return _elem;
     }
 
-    public LLNode<T> next()
-    {
+    public LLNode<T> next() {
         return _next;
     }
 
-    public void setElem(T elem)
-    {
+    public void setElem(T elem) {
         _elem = elem;
     }
 
-    public void setNext(LLNode<T> next)
-    {
+    public void setNext(LLNode<T> next) {
         _next = next;
     }
 
