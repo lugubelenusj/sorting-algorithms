@@ -1,7 +1,7 @@
 import java.util.Random;
 import java.util.Arrays;
 
-public class SortTest {
+public class TestArray {
 
     public static void main(String[] args) {
         
@@ -9,7 +9,7 @@ public class SortTest {
         double duration;
 
         final int NUMITER = 1;
-        final int SIZE = 30;
+        final int SIZE = 20;
         Integer[] array = new Integer[SIZE];
 
         Random generator = new Random();
@@ -20,8 +20,9 @@ public class SortTest {
                 array[j] = generator.nextInt(50);
             }
             System.out.println("Before: " + Arrays.toString(array));
-            Sort.quickSort(array, /*2*/0, /*20*/SIZE - 1, false);
-            System.out.println("After: " + Arrays.toString(array));
+            // (2, 10) (0, SIZE -1)
+            Sort.insertionSort(array, 0, SIZE - 1, true);
+            System.out.println("After : " + Arrays.toString(array));
         }
         end = System.currentTimeMillis();
 
