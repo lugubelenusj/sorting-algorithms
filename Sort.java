@@ -71,28 +71,55 @@ public class Sort {
     // }
 
     public static <T extends Comparable<T>> void quickSort(T[] array, int low, int high, boolean reversed) {
-        int i = low;
-        int j = high;
-        T pivot = array[low + (high-low)/2];
+        if (reversed == false) {
+            int i = low;
+            int j = high;
+            T pivot = array[low + (high-low)/2];
 
-        while (i <= j) {
-            while (array[i].compareTo(pivot) < 0) {
-                i++;
+            while (i <= j) {
+                while (array[i].compareTo(pivot) < 0) {
+                    i++;
+                }
+                while (array[j].compareTo(pivot) > 0) {
+                    j--;
+                }
+                if (i <= j) {
+                    swap(array, i, j);
+                    i++;
+                    j--;
+                }
             }
-            while (array[j].compareTo(pivot) > 0) {
-                j--;
+            if (low < j) {
+                quickSort(array, low, j, false);
             }
-            if (i <= j) {
-                swap(array, i, j);
-                i++;
-                j--;
+            if (i < high) {
+                quickSort(array, i, high, false);
             }
         }
-        if (low < j) {
-            quickSort(array, low, j, false);
-        }
-        if (i < high) {
-            quickSort(array, i, high, false);
+        else {
+            int i = low;
+            int j = high;
+            T pivot = array[low + (high-low)/2];
+
+            while (i <= j) {
+                while (array[i].compareTo(pivot) > 0) {
+                    i++;
+                }
+                while (array[j].compareTo(pivot) < 0) {
+                    j--;
+                }
+                if (i <= j) {
+                    swap(array, i, j);
+                    i++;
+                    j--;
+                }
+            }
+            if (low < j) {
+                quickSort(array, low, j, true);
+            }
+            if (i < high) {
+                quickSort(array, i, high, true);
+            }
         }
     }
 

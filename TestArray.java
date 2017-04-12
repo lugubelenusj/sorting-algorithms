@@ -21,7 +21,7 @@ public class TestArray {
             }
             System.out.println("Before: " + Arrays.toString(array));
             // (2, 10) (0, SIZE -1)
-            Sort.insertionSort(array, 0, SIZE - 1, true);
+            Sort.quickSort(array, 0, SIZE - 1, true);
             System.out.println("After : " + Arrays.toString(array));
         }
         end = System.currentTimeMillis();
