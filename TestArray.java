@@ -11,6 +11,7 @@ public class TestArray {
         final int NUMITER = 1;
         final int SIZE = 20;
         Integer[] array = new Integer[SIZE];
+        //int[] array = new int[SIZE];
 
         Random generator = new Random();
 
@@ -20,9 +21,10 @@ public class TestArray {
                 array[j] = generator.nextInt(50);
             }
             System.out.println("Before: " + Arrays.toString(array));
-            // (2, 10) (0, SIZE -1)
-            Sort.quickSort(array, 0, SIZE - 1, true);
+            Sort.shellSort(array, 0, SIZE - 1, true);
+            // Sort.shellSort(array, 3, 17, false);
             System.out.println("After : " + Arrays.toString(array));
+
         }
         end = System.currentTimeMillis();
 
