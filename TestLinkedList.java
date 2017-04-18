@@ -7,7 +7,6 @@ public class TestLinkedList {
         long start, end;
         double duration;
 
-        final int NUMITER = 1;
         final int SIZE = 19;
 
         Random generator = new Random();
@@ -15,20 +14,21 @@ public class TestLinkedList {
         LLNode current = head;
 
         start = System.currentTimeMillis();
-        for (int i = 0; i < NUMITER; i++) {
-            for (int j = 1; j < SIZE; j++) {
-                current.setNext(new LLNode(generator.nextInt(50)));
-                current = current.next();
-            }
-            System.out.print("Before: ");
-            printList(head);
-            Sort.mergeSortLL(head, false);
-            System.out.print("After:  "); 
-            printList(head);
+
+        for (int j = 1; j < SIZE; j++) {
+            current.setNext(new LLNode(generator.nextInt(50)));
+            current = current.next();
         }
+
+        System.out.print("Before: ");
+        printList(head);
+        head = Sort.mergeSortLL(head, true);
+        System.out.print("After:  "); 
+        printList(head);
+
         end = System.currentTimeMillis();
 
-        duration = ((double) (end - start)) / NUMITER;
+        duration = ((double) (end - start));
         System.out.println("duration: " + duration);
     }
 

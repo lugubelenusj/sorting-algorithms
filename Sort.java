@@ -86,7 +86,7 @@ public class Sort {
         }
     }
    
-    public static <T extends Comparable<T>> void heapSort(T[] array, int lowindex, int highindex, boolean reversed) {
+    public static <T extends Comparable<T>> void heapSort(T[] array, int low, int high, boolean reversed) {
     
     }
 
@@ -123,56 +123,62 @@ public class Sort {
         return j;
     }
 
-    public static <T extends Comparable<T>> void optimizedQuickSort(T[] array, int lowindex, int highindex, boolean reversed) {
-        if (array.length < 10) {
-            insertionSort(array, lowindex, highindex, reversed);
+    public static <T extends Comparable<T>> void optimizedQuickSort(T[] array, int low, int high, boolean reversed) {
+        if (array.length < 20) {
+            shellSort(array, low, high, reversed);
         }
-        if (lowindex < highindex) {
-            int mid = partition(array, lowindex, highindex, reversed);
-            quickSort(array, lowindex, mid, reversed);
-            quickSort(array, mid+1, highindex, reversed);
+        else if (low < high) {
+            int mid = partition(array, low, high, reversed);
+            quickSort(array, low, mid, reversed);
+            quickSort(array, mid+1, high, reversed);
         }
     }
 
     // 4 Sorting algorithms that sort Linked Lists of Comparables
 
-    // public static <T extends Comparable<T>> LLNode<T> insertionSortLL(LLNode<T> list, boolean reversed) {
-    //     LLNode cur1 = list.next();
-    //     while (cur1 != null) {
-    //         //T insertElem = cur1.elem();
-    //         LLNode cur2 = cur1;
-    //         while (cur2.next() != list && cur2.next() != null) {
-    //             if (cur2.elem().compareTo(cur2.next().elem()) <= 0) {
-    //                 swapNodes(cur2, cur2.next());
-    //             }
-    //             cur2 = cur2.next();
-    //         }
-    //     }
-    //     return list;
-    // }
-
-    // public static <T extends Comparable<T>> LLNode<T> insertionSortLL(LLNode<T> list, boolean reversed) {
-    //     LLNode cur1 = list.next();
-    //     int cur1Index = 1;
-
-    //     while (cur1 != null) {
-
-    //         LLNode cur2 = list;
-    //         for (int i = 0; i < cur1Index; i++) {
-    //             cur2 = cur2.next();
-    //         }
-
-    //         for (LLNode temp = cur2; temp.next() != list && temp.next().elem().compareTo(cur1.elem()) > 0; temp = temp.next()) {
-    //             temp.next().setElem(temp.elem());
-    //         }
-    //         cur2.setElem(cur1.elem());
-    //     }
-    //     return list;
-    // }
-
-    public static <T extends Comparable<T>> LLNode<T> insertionSortLL(LLNode<T> list, boolean reversed) {
-        LLNode current = list;
-        return list;
+    public static <T extends Comparable<T>> LLNode<T> insertionSortLL(LLNode<T> node, boolean reversed) {
+        if (reversed == false) {
+            if (node.next() == null) {
+                return node;
+            }
+            else {
+                LLNode head = insertionSortLL(node.next(), reversed);
+                LLNode<T> current = head;
+                while (current.next() != null) {
+                    if (node.elem().compareTo(current.elem()) < 0) {
+                        swapNodes(node, current);
+                    }
+                    current = current.next();
+                }
+                if (current.elem().compareTo(node.elem()) > 0) {
+                    swapNodes(node, current);
+                }
+                node.setNext(null);
+                current.setNext(node);
+                return head;
+            }
+        }
+        else {
+            if (node.next() == null) {
+                return node;
+            }
+            else {
+                LLNode head = insertionSortLL(node.next(), reversed);
+                LLNode<T> current = head;
+                while (current.next() != null) {
+                    if (node.elem().compareTo(current.elem()) > 0) {
+                        swapNodes(node, current);
+                    }
+                    current = current.next();
+                }
+                if (current.elem().compareTo(node.elem()) < 0) {
+                    swapNodes(node, current);
+                }
+                node.setNext(null);
+                current.setNext(node);
+                return head;
+            }
+        }
     }
 
     public static <T extends Comparable<T>> LLNode<T> selectionSortLL(LLNode<T> list, boolean reversed) {
@@ -209,42 +215,93 @@ public class Sort {
         return list;
     }
 
-    public static <T extends Comparable<T>> LLNode<T> mergeSortLL(LLNode<T> list, boolean reversed) {    
-        if (list == null || list.next() == null) {
-            return list;
-        }
-        LLNode middle = getMiddle(list);
-        LLNode secondHalf = middle.next();
-        middle.setNext(null);
-
-        return merge(mergeSortLL(list, reversed), mergeSortLL(secondHalf, reversed));
-    }
-
-    private static <T extends Comparable<T>> LLNode<T> merge(LLNode<T> a, LLNode<T> b) {
-        LLNode dummyHead, curr; 
-        dummyHead = new LLNode(0); 
-        curr = dummyHead;
-        while (a != null && b != null) {
-            if (a.elem().compareTo(b.elem()) <= 0) { 
-                curr.setNext(a); 
-                a = a.next(); 
+    public static <T extends Comparable<T>> LLNode<T> mergeSortLL(LLNode<T> node, boolean reversed) {
+        if (reversed == false) {    
+            if (node.next() == null) {
+                return node;
             }
-            else { 
-                curr.setNext(b); 
-                b = b.next(); 
+            else if (node.next().next() == null) {
+                if (node.elem().compareTo(node.next().elem()) > 0) {
+                    swapNodes(node, node.next());
+                }
+                return node;
             }
-            curr = curr.next();
-        }
-        if (a == null) {
-            curr.setNext(b);
+            else {
+                LLNode<T> LHead = node;
+                LLNode<T> mid = getMid(node);
+                LLNode<T> RHead = mid.next();
+                mid.setNext(null);
+
+                LHead = mergeSortLL(LHead, reversed);
+                RHead = mergeSortLL(RHead, reversed);
+
+                LLNode<T> LCur = LHead;
+                LLNode<T> RCur = RHead;
+
+                while (LCur != null) {
+                    while (RCur != null) {
+                        if (LCur.elem().compareTo(RCur.elem()) > 0) {
+                            swapNodes(LCur, RCur);
+                        }
+                        RCur = RCur.next();
+                    }
+                    RCur = RHead;
+                    LCur = LCur.next();
+                }
+                LLNode<T> sortedLeft = insertionSortLL(LHead, reversed);
+                LLNode<T> sortedRight = insertionSortLL(RHead, reversed);
+                return combine(sortedLeft, sortedRight);
+            }
         }
         else {
-            curr.setNext(a);
+            if (node.next() == null) {
+                return node;
+            }
+            else if (node.next().next() == null) {
+                if (node.elem().compareTo(node.next().elem()) < 0) {
+                    swapNodes(node, node.next());
+                }
+                return node;
+            }
+            else {
+                LLNode<T> LHead = node;
+                LLNode<T> mid = getMid(node);
+                LLNode<T> RHead = mid.next();
+                mid.setNext(null);
+
+                LHead = mergeSortLL(LHead, reversed);
+                RHead = mergeSortLL(RHead, reversed);
+
+                LLNode<T> LCur = LHead;
+                LLNode<T> RCur = RHead;
+
+                while (LCur != null) {
+                    while (RCur != null) {
+                        if (LCur.elem().compareTo(RCur.elem()) < 0) {
+                            swapNodes(LCur, RCur);
+                        }
+                        RCur = RCur.next();
+                    }
+                    RCur = RHead;
+                    LCur = LCur.next();
+                }
+                LLNode<T> sortedLeft = insertionSortLL(LHead, reversed);
+                LLNode<T> sortedRight = insertionSortLL(RHead, reversed);
+                return combine(sortedLeft, sortedRight);
+            }
         }
-        return dummyHead.next();
     }
 
-    public static <T extends Comparable<T>> LLNode<T> getMiddle(LLNode<T> head) {
+    public static <T extends Comparable<T>> LLNode<T> combine(LLNode<T> left, LLNode<T> right) {
+        LLNode<T> current = left;
+        while(current.next() != null) {
+            current = current.next();
+        }
+        current.setNext(right);
+        return left;
+    }    
+
+    public static <T extends Comparable<T>> LLNode<T> getMid(LLNode<T> head) {
         if (head == null) { 
             return head; 
         }
@@ -289,38 +346,9 @@ public class Sort {
     //     return current;
     // }
 
-    // public static <T extends Comparable<T>> LLNode<T> quickSortLL(LLNode<T> list, boolean reversed) {
-    //     if (list == null || list.next() == null) {
-    //         return list;
-    //     }
-
-    //     LLNode pointer = list;
-    //     while (pointer != null) {
-    //         pointer = pointer.next();
-    //     }
-    //     LLNode high = pointer;
-    //     LLNode low = list;
-
-    //     LLNode mid = partitionLL(low, high, reversed);
-    // }
-
-    // public static <T extends Comparable<T>> LLNode<T> partitionLL(LLNode<T> low, LLNode<T> high, boolean reversed) {
-    //     LLNode pivot = low;
-    //     LLNode i = low;
-    //     LLNode j = high.next();;
-    //     while (i < j) {
-    //         for (i++; array[i].compareTo(array[pivot]) < 0; i++);
-    //         for (j--; array[j].compareTo(array[pivot]) > 0; j--);
-    //         if (i < j) {
-    //             swapNodes(i, j);
-    //         }
-    //     }
-    //     return j;
-    // }    
-
-    // public static <T extends Comparable<T>> LLNode<T> quickSortLL(LLNode<T> list, LLNode low, LLNode high, boolean reversed) {
-
-    // }
+    public static <T extends Comparable<T>> LLNode<T> quickSortLL(LLNode<T> list, boolean reversed) {
+        return null;
+    }
 
     private static <T extends Comparable<T>> LLNode<T> partitionLL(LLNode<T> a, LLNode<T> b) {
         return null;
@@ -328,14 +356,14 @@ public class Sort {
 
     // 1 Sorting algorithm that sorts an Array of ints
    
-    public static void bucketSort(int[] array, int lowindex, int highindex, boolean reversed) {
+    public static void bucketSort(int[] array, int low, int high, boolean reversed) {
         // Get number of buckets.
-        int buckets = (highindex - lowindex + 1) / 2;
+        int buckets = (high - low + 1) / 2;
 
         // Get min and max.
-        int min = array[lowindex];
-        int max = array[lowindex];
-        for (int i = lowindex; i <= highindex; i++) {
+        int min = array[low];
+        int max = array[low];
+        for (int i = low; i <= high; i++) {
             if (array[i] < min) {
                 min = array[i];
             }
@@ -350,7 +378,7 @@ public class Sort {
         // Fill bucketArray.
         LLNode[] bucketArray = new LLNode[buckets];
         int bucketNum;
-        for (int i = lowindex; i <= highindex; i++) {
+        for (int i = low; i <= high; i++) {
             // TODO get the correct bucketNum!
             bucketNum = (max - min) / array[i];
             // TODO how do we know when an index is empty?
@@ -370,7 +398,7 @@ public class Sort {
         }
 
         // Repopulate the original array.
-        int i = lowindex;
+        int i = low;
         for (LLNode node : bucketArray) {
             while (node != null) {
                 array[i] = (Integer) node.elem();
@@ -383,49 +411,37 @@ public class Sort {
 
     // 1 Sorting algorithm that sorts an Array of Strings
 
-    public static void radixSort(String[] array, int lowindex, int highindex, boolean reversed) {
-        // Get the length of the longest string.
-        int max = array[0].length();
-        for (String str : array) {
-            if (str.length() > max) {
-                max = str.length();
-            }
-        }
-
-        // How do we put the elems in the new array?
-    }
-
-    // public static void countSort(String[] array, int lowindex, int highindex, boolean reversed) {
-    //     int size = highindex - lowindex + 1;
-    //     int output[] = new int[n]; // output array
-    //     int i;
-    //     int count[] = new int[10];
-    //     Arrays.fill(count,0);
- 
-    //     // Store count of occurrences in count[]
-    //     for (i = 0; i < n; i++)
-    //         count[ (arr[i]/exp)%10 ]++;
- 
-    //     // Change count[i] so that count[i] now contains
-    //     // actual position of this digit in output[]
-    //     for (i = 1; i < 10; i++)
-    //         count[i] += count[i - 1];
- 
-    //     // Build the output array
-    //     for (i = n - 1; i >= 0; i--)
-    //     {
-    //         output[count[ (arr[i]/exp)%10 ] - 1] = arr[i];
-    //         count[ (arr[i]/exp)%10 ]--;
+    // public static void radixSort(String[] array, int low, int high, boolean reversed) {
+    //     // Get the length of the longest string.
+    //     int max = array[0].length();
+    //     for (String str : array) {
+    //         if (str.length() > max) {
+    //             max = str.length();
+    //         }
     //     }
- 
-    //     // Copy the output array to arr[], so that arr[] now
-    //     // contains sorted numbers according to curent digit
-    //     for (i = 0; i < n; i++)
-    //         arr[i] = output[i];
+
+    //     for (int exp = 1; max / exp > 0; exp *= 10) {
+    //         countSort(array, max);
+    //     }
+
+    //     // How do we put the elems in the new array?
     // }
 
-    // We can pass in the original array with the lowindex and highindex as params, or make a new array in the parent spliced method and pass that in.
-    // public static void countingSort(String[] array, )
+    // public static void countSort(String[] array, int max) {
+    //     int[] count = new int[max+1];
+    //     for (int i = 0; i <= max; i++) {
+    //         count[i] = 0;
+    //     }
+    //     for (int i = 0; i < array.length; i++) {
+    //         count[array[i]]++;
+    //     }
+    //     int index = 0;
+    //     for (int i = 0; i < max; i++) {
+    //         for (int j = 0; j < count[i]; j++) {
+    //             array[index++] = i;
+    //         }
+    //     }
+    // }
     
     public static <T extends Comparable<T>> void swap(T[] array, int x, int y) {
         T temp = array[x];
