@@ -313,39 +313,6 @@ public class Sort {
         return slow;
     }
 
-    // private static <T extends Comparable<T>> LLNode<T> getMiddle(LLNode<T> list) {
-    //     LLNode cur1 = list;
-    //     LLNode cur2 = list;
-    //     while (cur2.next() != null) {
-    //         cur2 = cur2.next();
-    //         if (cur2.next() != null) {
-    //             cur2 = cur2.next();
-    //             cur1 = cur1.next();
-    //         }
-    //     }
-    //     return cur1;
-    // }
-
-    // private static <T extends Comparable<T>> LLNode<T> getMiddle(LLNode<T> list) {
-    //     LLNode current = list;
-    //     int size = 0;
-
-    //     // Get size.
-    //     while (current != null) {
-    //         size++;
-    //         current = current.next();
-    //     }
-
-    //     // Get middle.
-    //     int half = size / 2;
-    //     current = list;
-    //     for (int i = 1; i < half; i++) {
-    //         current = current.next();
-    //     }
-
-    //     return current;
-    // }
-
     public static <T extends Comparable<T>> LLNode<T> quickSortLL(LLNode<T> list, boolean reversed) {
         return null;
     }
