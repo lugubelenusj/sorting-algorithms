@@ -313,13 +313,9 @@ public class Sort {
         return slow;
     }
 
-    public static <T extends Comparable<T>> LLNode<T> quickSortLL(LLNode<T> list, boolean reversed) {
-        return null;
-    }
-
-    private static <T extends Comparable<T>> LLNode<T> partitionLL(LLNode<T> a, LLNode<T> b) {
-        return null;
-    }    
+    // public static <T extends Comparable<T>> LLNode<T> quickSortLL(LLNode<T> node, boolean reversed) {
+    //     if ()
+    // } 
 
     // 1 Sorting algorithm that sorts an Array of ints
    
@@ -338,16 +334,13 @@ public class Sort {
                 max = array[i];
             }
         }
-        
-        // Get capacity of each bucket.
-        int bucketCapacity = (max - min) / buckets;
 
         // Fill bucketArray.
         LLNode[] bucketArray = new LLNode[buckets];
         int bucketNum;
         for (int i = low; i <= high; i++) {
             // TODO get the correct bucketNum!
-            bucketNum = (max - min) / array[i];
+            bucketNum = (max - min) / buckets;
             // TODO how do we know when an index is empty?
             if (bucketArray[bucketNum] == null) {
                 bucketArray[bucketNum] = new LLNode(array[i]);
@@ -361,19 +354,36 @@ public class Sort {
 
         // Sort each linked list in bucketArray.
         for (LLNode node : bucketArray) {
-            selectionSortLL(node, reversed);
-        }
-
-        // Repopulate the original array.
-        int i = low;
-        for (LLNode node : bucketArray) {
-            while (node != null) {
-                array[i] = (Integer) node.elem();
-                i++;
-                node = node.next();
+            if (node != null) {
+                selectionSortLL(node, reversed);
             }
         }
 
+        // Repopulate the original array.
+        if (reversed == false) {
+            int i = low;
+            for (LLNode node : bucketArray) {
+                while (node != null) {
+                    array[i] = (Integer) node.elem();
+                    i++;
+                    node = node.next();
+                }
+            }
+        }
+        else {
+            int j = high;
+            LLNode node;
+            for (int i = bucketArray.length-1; i >= 0; i--) {
+                if (bucketArray[i] != null) {
+                    node = selectionSortLL(bucketArray[i], false);
+                    while (node != null) {
+                        array[j] = (Integer) node.elem();
+                        node = node.next();
+                        j--;
+                    }
+                }
+            }
+        }
     }
 
     // 1 Sorting algorithm that sorts an Array of Strings

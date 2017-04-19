@@ -8,9 +8,9 @@ public class TestArray {
         long start, end;
         double duration;
 
-        final int SIZE = 2000000;
-        Integer[] array = new Integer[SIZE];
-        // int[] array = new int[SIZE];
+        final int SIZE = 20;
+        // Integer[] array = new Integer[SIZE];
+        int[] array = new int[SIZE];
 
         Random generator = new Random();
 
@@ -21,8 +21,8 @@ public class TestArray {
         }
 
         System.out.println("Before: " + Arrays.toString(array));
-        Sort.optimizedQuickSort(array, 0, SIZE-1, false);
-        // Sort.shellSort(array, 3, 17, false);
+        // Sort.bucketSort(array, 0, SIZE-1, false);
+        Sort.bucketSort(array, 3, 17, true);
         System.out.println("After : " + Arrays.toString(array));
 
         end = System.currentTimeMillis();
